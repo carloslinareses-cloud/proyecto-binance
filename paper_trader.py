@@ -24,10 +24,10 @@ from datetime import datetime, timezone
 # los runners de GitHub, a diferencia de api.binance.com que devuelve 451 en EEUU)
 BASE = "https://data-api.binance.vision"
 SYMBOLS = ["BTCUSDT", "ETHUSDT"]
-INTERVAL = "15m"          # temporalidad de las velas
+INTERVAL = "1d"           # temporalidad DIARIA (la que gano en el backtest 2024-2026)
 FAST = 7                  # periodo SMA rapida
 SLOW = 25                 # periodo SMA lenta
-START_CASH_PER_SYMBOL = 5000.0   # capital virtual (USDT) por simbolo
+START_CASH_PER_SYMBOL = 12.5   # capital virtual (USDT) por simbolo -> $25 total
 FEE = 0.001               # comision simulada por operacion (0.1%)
 MAX_TRADES = 200          # cuantas operaciones guardar en el historial
 MAX_EQUITY_POINTS = 2000  # cuantos puntos de la curva de capital guardar
@@ -68,6 +68,8 @@ def new_symbol_state():
         "sma_fast": 0.0,
         "sma_slow": 0.0,
         "signal": "FLAT",
+        "trend": "-",
+        "prev_signal_long": None,
         "equity": START_CASH_PER_SYMBOL,
     }
 
@@ -107,12 +109,11 @@ def run():
         price = closes[-1]
         f = sma(closes, FAST)
         sl = sma(closes, SLOW)
-        signal = "FLAT"
-        if f is not None and sl is not None:
-            signal = "LONG" if f > sl else "FLAT"
+        # Tendencia actual: True si SMA rapida > SMA lenta (alcista)
+        sig_long = (f is not None and sl is not None and f > sl)
 
-        # --- Ejecutar la operacion simulada segun el cambio de senal ---
-        if signal == "LONG" and s["position"] == 0.0 and s["cash"] > 0:
+        # --- Empieza en USDT y COMPRA cuando la tendencia diaria es alcista (mejor momento) ---
+        if s["position"] == 0.0 and s["cash"] > 0 and sig_long:
             qty = (s["cash"] * (1 - FEE)) / price
             st["trades"].insert(0, {
                 "time": now_iso, "symbol": sym, "side": "BUY",
@@ -121,7 +122,8 @@ def run():
             s["position"] = qty
             s["avg_entry"] = price
             s["cash"] = 0.0
-        elif signal == "FLAT" and s["position"] > 0.0:
+        # --- VENDE cuando la tendencia gira a bajista (protege el capital) ---
+        elif s["position"] > 0.0 and not sig_long:
             qty = s["position"]
             proceeds = qty * price * (1 - FEE)
             pnl = proceeds - (qty * s["avg_entry"])
@@ -133,10 +135,12 @@ def run():
             s["position"] = 0.0
             s["avg_entry"] = 0.0
 
+        s["prev_signal_long"] = sig_long
         s["price"] = price
         s["sma_fast"] = round(f, 2) if f else 0.0
         s["sma_slow"] = round(sl, 2) if sl else 0.0
-        s["signal"] = signal
+        s["trend"] = "UP" if sig_long else "DOWN"
+        s["signal"] = "LONG" if s["position"] > 0.0 else "FLAT"  # badge: invertido vs en espera
         s["equity"] = round(s["cash"] + s["position"] * price, 2)
 
         total_equity += s["equity"]

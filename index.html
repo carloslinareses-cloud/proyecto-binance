@@ -7,7 +7,7 @@
 <title>Paper Trader · BTC / ETH</title>
 <style>
   :root{
-    --bg:#0b0e11; --card:#151a21; --card2:#1b222c; --line:#252d38;
+    --bg:#0b0e11; --card:#151a21; --line:#252d38;
     --txt:#e8edf2; --muted:#8b97a7; --up:#16c784; --down:#ea3943;
     --accent:#f0b90b; --btc:#f7931a; --eth:#627eea;
   }
@@ -16,48 +16,48 @@
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     padding:14px;max-width:900px;margin:0 auto;padding-bottom:40px}
   header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
-  h1{font-size:17px;margin:0;font-weight:700;letter-spacing:.2px}
+  h1{font-size:17px;margin:0;font-weight:700}
   h1 .sim{font-size:10px;background:var(--accent);color:#000;padding:2px 6px;border-radius:5px;margin-left:6px;vertical-align:middle;font-weight:800}
-  .upd{font-size:11px;color:var(--muted);text-align:right;line-height:1.4}
-  .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--up);margin-right:4px;animation:pulse 2s infinite}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .upd{font-size:11px;color:var(--muted);text-align:right;line-height:1.5}
+  .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--up);margin-right:4px;animation:pulse 1.6s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
   .full{grid-column:1 / -1}
   .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
   .big{font-size:30px;font-weight:800;line-height:1.1}
-  .sub{font-size:13px;margin-top:4px}
+  .sub{font-size:13px;margin-top:4px;color:var(--muted)}
   .up{color:var(--up)} .down{color:var(--down)}
   .sym-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
   .sym-name{font-weight:700;font-size:15px}
-  .badge{font-size:11px;font-weight:800;padding:3px 9px;border-radius:20px}
+  .badge{font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px}
   .badge.LONG{background:rgba(22,199,132,.15);color:var(--up);border:1px solid rgba(22,199,132,.4)}
   .badge.FLAT{background:rgba(139,151,167,.15);color:var(--muted);border:1px solid rgba(139,151,167,.35)}
-  .price{font-size:22px;font-weight:800}
+  .price{font-size:23px;font-weight:800;transition:color .25s}
+  .chg{font-size:12px;font-weight:700;margin-left:6px}
   .rowmini{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:6px}
   .rowmini b{color:var(--txt);font-weight:600}
-  canvas{width:100%;height:180px;display:block}
+  canvas{width:100%;height:170px;display:block}
   table{width:100%;border-collapse:collapse;font-size:12px}
   th,td{text-align:right;padding:7px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
-  th{color:var(--muted);font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:.4px}
+  th{color:var(--muted);font-weight:600;text-transform:uppercase;font-size:10px}
   td:first-child,th:first-child{text-align:left}
   .side-BUY{color:var(--up);font-weight:700}
   .side-SELL{color:var(--down);font-weight:700}
   .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .empty{color:var(--muted);font-size:13px;text-align:center;padding:18px}
   .foot{color:var(--muted);font-size:11px;text-align:center;margin-top:16px;line-height:1.6}
-  @media(max-width:520px){ .big{font-size:26px} }
 </style>
 </head>
 <body>
 <header>
   <h1>Paper Trader<span class="sim">SIMULACIÓN</span></h1>
-  <div class="upd"><span class="dot"></span><span id="live">Cargando…</span><br><span id="updated"></span></div>
+  <div class="upd"><span class="dot"></span><span id="live">Conectando…</span><br><span id="updated"></span></div>
 </header>
 
 <div class="grid">
   <div class="card full">
-    <div class="label">PnL acumulado (capital simulado)</div>
+    <div class="label">PnL en vivo · capital $<span id="startcap">25</span> (simulado)</div>
     <div class="big" id="pnl">—</div>
     <div class="sub" id="equity"></div>
   </div>
@@ -66,76 +66,104 @@
   <div class="card" id="card-ETHUSDT"></div>
 
   <div class="card full">
-    <div class="label">Evolución del capital total</div>
+    <div class="label">Evolución del capital (por operación del bot)</div>
     <canvas id="chart"></canvas>
   </div>
 
   <div class="card full">
-    <div class="label">Historial de operaciones</div>
+    <div class="label">Historial de operaciones del bot</div>
     <div class="tbl-wrap"><table id="trades">
-      <thead><tr><th>Hora (UTC)</th><th>Par</th><th>Lado</th><th>Precio</th><th>Cantidad</th><th>PnL</th></tr></thead>
+      <thead><tr><th>Fecha (UTC)</th><th>Par</th><th>Lado</th><th>Precio</th><th>Cantidad</th><th>PnL</th></tr></thead>
       <tbody><tr><td colspan="6" class="empty">Cargando…</td></tr></tbody>
     </table></div>
   </div>
 </div>
 
 <div class="foot">
-  Datos: Binance público (sin API keys). Estrategia de ejemplo SMA. <b>Esto es paper trading</b>, no dinero real.<br>
-  Se actualiza vía GitHub Actions (~cada 15 min). Esta página se refresca sola cada 60 s.
+  <b>Precios en tiempo real</b> desde Binance (público, cada 4 s). Estrategia: cruce de medias SMA 7/25 en velas <b>diarias</b>, empieza en USDT y compra en el cruce al alza.<br>
+  Esto es <b>paper trading</b> (simulación), no dinero real. El bot decide en GitHub Actions cada 15 min.
 </div>
 
 <script>
 const SYMBOLS = ["BTCUSDT","ETHUSDT"];
 const COLORS = {BTCUSDT:"#f7931a", ETHUSDT:"#627eea"};
-const fmt = (n,d=2)=> (n==null||isNaN(n))?"—":Number(n).toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
-const money = n => "$"+fmt(n,2);
+const PRICE_URL = 'https://data-api.binance.vision/api/v3/ticker/24hr?symbols=' + encodeURIComponent('["BTCUSDT","ETHUSDT"]');
+let STATE = null;   // estado del bot (posiciones, efectivo) desde state.json
+let LIVE = {};      // precios en vivo desde Binance
 
-async function load(){
+const fmt = (n,d=2)=> (n==null||isNaN(n))?"—":Number(n).toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+const money = (n,d=2) => "$"+fmt(n,d);
+
+// ---------- Precios en TIEMPO REAL (Binance directo) ----------
+async function loadPrices(){
   try{
-    const res = await fetch("data/state.json?t="+Date.now(), {cache:"no-store"});
-    if(!res.ok) throw new Error("HTTP "+res.status);
-    const st = await res.json();
-    render(st);
+    const r = await fetch(PRICE_URL, {cache:"no-store"});
+    const arr = await r.json();
+    for(const t of arr){ LIVE[t.symbol] = {price:parseFloat(t.lastPrice), chg:parseFloat(t.priceChangePercent)}; }
     document.getElementById("live").textContent = "En vivo";
-  }catch(e){
-    document.getElementById("live").textContent = "Sin datos aún";
-    console.error(e);
+    renderLive();
+  }catch(e){ document.getElementById("live").textContent = "Reintentando…"; }
+}
+
+// ---------- Estado del bot (cada 60 s) ----------
+async function loadState(){
+  try{
+    const r = await fetch("data/state.json?t="+Date.now(), {cache:"no-store"});
+    if(!r.ok) throw 0;
+    STATE = await r.json();
+    if(STATE.total) document.getElementById("startcap").textContent = fmt(STATE.total.start,0);
+    if(STATE.updated_at) document.getElementById("updated").textContent = "bot: "+new Date(STATE.updated_at).toLocaleString();
+    renderState(); renderLive();
+  }catch(e){ /* aún sin datos del bot */ }
+}
+
+// ---------- Render en vivo (usa posiciones del bot + precios reales) ----------
+function renderLive(){
+  for(const sym of SYMBOLS){
+    const live = LIVE[sym];
+    const s = STATE && STATE.symbols ? STATE.symbols[sym] : null;
+    const el = document.getElementById("card-"+sym);
+    if(!el) continue;
+    const price = live ? live.price : (s? s.price:0);
+    const chg = live ? live.chg : 0;
+    const invested = s && s.position>0;
+    const equity = s ? (s.cash + s.position*price) : null;
+    const posTxt = invested ? (fmt(s.position,6)+" @ "+money(s.avg_entry)) : "En espera (USDT)";
+    const fast = s && STATE.config ? STATE.config.fast : "";
+    const slow = s && STATE.config ? STATE.config.slow : "";
+    const trendTxt = s ? (s.trend==='UP'?'↑ alcista':(s.trend==='DOWN'?'↓ bajista':'—')) : '—';
+    el.innerHTML = `
+      <div class="sym-head">
+        <span class="sym-name" style="color:${COLORS[sym]}">${sym.replace("USDT","")}<span style="color:var(--muted);font-weight:400">/USDT</span></span>
+        <span class="badge ${invested?'LONG':'FLAT'}">${invested?'COMPRADO':'EN ESPERA'}</span>
+      </div>
+      <div><span class="price">${money(price)}</span><span class="chg ${chg>=0?'up':'down'}">${chg>=0?'▲':'▼'} ${fmt(Math.abs(chg))}%</span></div>
+      <div class="rowmini"><span>Equity</span><b>${equity!=null?money(equity):"—"}</b></div>
+      <div class="rowmini"><span>Posición</span><b>${posTxt}</b></div>
+      <div class="rowmini"><span>Tendencia (SMA ${fast}/${slow})</span><b>${trendTxt}</b></div>`;
+  }
+  // PnL total en vivo
+  if(STATE && STATE.symbols){
+    let eq=0, start=0;
+    for(const sym of SYMBOLS){
+      const s=STATE.symbols[sym]; const price = LIVE[sym]?LIVE[sym].price:s.price;
+      eq += s.cash + s.position*price; start += s.start_cash;
+    }
+    const pnl = eq-start, pct = start? (eq/start-1)*100 : 0;
+    const p = document.getElementById("pnl");
+    p.textContent = (pnl>=0?"+":"") + money(pnl) + "  (" + (pct>=0?"+":"") + fmt(pct,2) + "%)";
+    p.className = "big " + (pnl>=0?"up":"down");
+    document.getElementById("equity").textContent = "Capital ahora: "+money(eq)+"  ·  Inicial: "+money(start);
   }
 }
 
-function render(st){
-  window._last = st;
-  const t = st.total || {};
-  const pnl = t.pnl || 0, pct = t.pnl_pct || 0;
-  const el = document.getElementById("pnl");
-  el.textContent = (pnl>=0?"+":"") + money(pnl) + "  (" + (pct>=0?"+":"") + fmt(pct,2) + "%)";
-  el.className = "big " + (pnl>=0?"up":"down");
-  document.getElementById("equity").textContent =
-    "Capital: " + money(t.equity) + "  ·  Inicial: " + money(t.start);
-
-  if(st.updated_at){
-    document.getElementById("updated").textContent = new Date(st.updated_at).toLocaleString();
-  }
-
-  for(const sym of SYMBOLS){
-    const s = (st.symbols||{})[sym]; if(!s) continue;
-    const posTxt = s.position>0 ? (fmt(s.position,6)+" @ "+money(s.avg_entry)) : "En efectivo";
-    document.getElementById("card-"+sym).innerHTML = `
-      <div class="sym-head">
-        <span class="sym-name" style="color:${COLORS[sym]}">${sym.replace("USDT","")}<span style="color:var(--muted);font-weight:400">/USDT</span></span>
-        <span class="badge ${s.signal}">${s.signal}</span>
-      </div>
-      <div class="price">${money(s.price)}</div>
-      <div class="rowmini"><span>Equity</span><b>${money(s.equity)}</b></div>
-      <div class="rowmini"><span>Posición</span><b>${posTxt}</b></div>
-      <div class="rowmini"><span>SMA ${st.config?st.config.fast:""}/${st.config?st.config.slow:""}</span><b>${fmt(s.sma_fast)} / ${fmt(s.sma_slow)}</b></div>`;
-  }
-
-  drawChart(st.equity_history||[], t.start||0);
-
+// ---------- Render de lo que cambia por operación (chart + tabla) ----------
+function renderState(){
+  if(!STATE) return;
+  drawChart(STATE.equity_history||[], (STATE.total||{}).start||0);
   const tb = document.querySelector("#trades tbody");
-  const trades = st.trades||[];
-  if(!trades.length){ tb.innerHTML = `<tr><td colspan="6" class="empty">Aún no hay operaciones. La estrategia opera cuando cruzan las medias.</td></tr>`; return; }
+  const trades = STATE.trades||[];
+  if(!trades.length){ tb.innerHTML = `<tr><td colspan="6" class="empty">Aún sin operaciones. El bot compra cuando la SMA rápida cruza sobre la lenta (velas diarias).</td></tr>`; return; }
   tb.innerHTML = trades.slice(0,40).map(tr=>{
     const time = new Date(tr.time).toLocaleString(undefined,{month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
     const pnl = tr.pnl==null?"":(tr.pnl>=0?'<span class="up">+'+money(tr.pnl)+'</span>':'<span class="down">'+money(tr.pnl)+'</span>');
@@ -144,41 +172,30 @@ function render(st){
 }
 
 function drawChart(hist, baseline){
-  const c = document.getElementById("chart");
-  const dpr = window.devicePixelRatio||1;
-  const W = c.clientWidth, H = 180;
-  c.width = W*dpr; c.height = H*dpr;
-  const ctx = c.getContext("2d"); ctx.scale(dpr,dpr);
-  ctx.clearRect(0,0,W,H);
-  if(hist.length<2){ ctx.fillStyle="#8b97a7"; ctx.font="13px sans-serif"; ctx.fillText("Aún no hay suficientes datos para el gráfico…",10,H/2); return; }
-  const vals = hist.map(p=>p.total_equity);
-  let min = Math.min(...vals, baseline), max = Math.max(...vals, baseline);
-  const pad = (max-min)*0.12 || max*0.02 || 1; min-=pad; max+=pad;
-  const pL=8, pR=8, pT=10, pB=10;
-  const x = i => pL + (W-pL-pR) * (i/(hist.length-1));
-  const y = v => pT + (H-pT-pB) * (1-(v-min)/(max-min));
-  // baseline (capital inicial)
+  const c=document.getElementById("chart"), dpr=window.devicePixelRatio||1, W=c.clientWidth, H=170;
+  c.width=W*dpr; c.height=H*dpr; const ctx=c.getContext("2d"); ctx.scale(dpr,dpr); ctx.clearRect(0,0,W,H);
+  if(hist.length<2){ ctx.fillStyle="#8b97a7"; ctx.font="13px sans-serif"; ctx.fillText("Aún no hay suficientes puntos para el gráfico…",10,H/2); return; }
+  const vals=hist.map(p=>p.total_equity);
+  let min=Math.min(...vals,baseline), max=Math.max(...vals,baseline);
+  const pad=(max-min)*0.12||max*0.02||1; min-=pad; max+=pad;
+  const pL=8,pR=8,pT=10,pB=10;
+  const x=i=>pL+(W-pL-pR)*(i/(hist.length-1));
+  const y=v=>pT+(H-pT-pB)*(1-(v-min)/(max-min));
   ctx.strokeStyle="#3a4453"; ctx.setLineDash([4,4]); ctx.lineWidth=1;
   ctx.beginPath(); ctx.moveTo(pL,y(baseline)); ctx.lineTo(W-pR,y(baseline)); ctx.stroke(); ctx.setLineDash([]);
-  // area + line
-  const last = vals[vals.length-1];
-  const col = last>=baseline ? "#16c784" : "#ea3943";
-  const grad = ctx.createLinearGradient(0,pT,0,H);
-  grad.addColorStop(0, col+"44"); grad.addColorStop(1, col+"00");
-  ctx.beginPath(); ctx.moveTo(x(0),y(vals[0]));
-  for(let i=1;i<vals.length;i++) ctx.lineTo(x(i),y(vals[i]));
-  ctx.lineTo(x(vals.length-1),H-pB); ctx.lineTo(x(0),H-pB); ctx.closePath();
-  ctx.fillStyle=grad; ctx.fill();
-  ctx.beginPath(); ctx.moveTo(x(0),y(vals[0]));
-  for(let i=1;i<vals.length;i++) ctx.lineTo(x(i),y(vals[i]));
+  const last=vals[vals.length-1], col=last>=baseline?"#16c784":"#ea3943";
+  const g=ctx.createLinearGradient(0,pT,0,H); g.addColorStop(0,col+"44"); g.addColorStop(1,col+"00");
+  ctx.beginPath(); ctx.moveTo(x(0),y(vals[0])); for(let i=1;i<vals.length;i++) ctx.lineTo(x(i),y(vals[i]));
+  ctx.lineTo(x(vals.length-1),H-pB); ctx.lineTo(x(0),H-pB); ctx.closePath(); ctx.fillStyle=g; ctx.fill();
+  ctx.beginPath(); ctx.moveTo(x(0),y(vals[0])); for(let i=1;i<vals.length;i++) ctx.lineTo(x(i),y(vals[i]));
   ctx.strokeStyle=col; ctx.lineWidth=2; ctx.lineJoin="round"; ctx.stroke();
-  // last point
   ctx.beginPath(); ctx.arc(x(vals.length-1),y(last),3.5,0,7); ctx.fillStyle=col; ctx.fill();
 }
 
-load();
-setInterval(load, 60000);
-window.addEventListener("resize", ()=>{ if(window._last) drawChart(window._last.equity_history||[], (window._last.total||{}).start||0); });
+loadState(); loadPrices();
+setInterval(loadPrices, 4000);   // precios en vivo cada 4 s
+setInterval(loadState, 60000);   // estado del bot cada 60 s
+window.addEventListener("resize", ()=>{ if(STATE) drawChart(STATE.equity_history||[], (STATE.total||{}).start||0); });
 </script>
 </body>
 </html>

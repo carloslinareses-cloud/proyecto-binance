@@ -1,75 +1,72 @@
 {
-  "started_at": "2026-07-23T05:39:05.337725+00:00",
+  "started_at": "2026-07-23T06:28:09.257660+00:00",
   "mode": "SIMULATION (paper trading) - sin ordenes reales",
   "config": {
-    "interval": "15m",
+    "interval": "1d",
     "fast": 7,
     "slow": 25,
     "fee": 0.001,
-    "start_cash_per_symbol": 5000.0
+    "start_cash_per_symbol": 12.5
   },
   "symbols": {
     "BTCUSDT": {
-      "start_cash": 5000.0,
-      "cash": 5000.0,
-      "position": 0.0,
-      "avg_entry": 0.0,
-      "price": 65698.0,
-      "sma_fast": 65678.11,
-      "sma_slow": 65818.62,
-      "signal": "FLAT",
-      "equity": 5000.0
+      "start_cash": 12.5,
+      "cash": 0.0,
+      "position": 0.00019008009469071094,
+      "avg_entry": 65695.99,
+      "price": 65695.99,
+      "sma_fast": 65301.51,
+      "sma_slow": 63504.34,
+      "signal": "LONG",
+      "trend": "UP",
+      "prev_signal_long": true,
+      "equity": 12.49
     },
     "ETHUSDT": {
-      "start_cash": 5000.0,
-      "cash": 5000.0,
-      "position": 0.0,
-      "avg_entry": 0.0,
-      "price": 1923.24,
-      "sma_fast": 1923.12,
-      "sma_slow": 1927.0,
-      "signal": "FLAT",
-      "equity": 5000.0
+      "start_cash": 12.5,
+      "cash": 0.0,
+      "position": 0.0064901822188497245,
+      "avg_entry": 1924.06,
+      "price": 1924.06,
+      "sma_fast": 1895.71,
+      "sma_slow": 1799.68,
+      "signal": "LONG",
+      "trend": "UP",
+      "prev_signal_long": true,
+      "equity": 12.49
     }
   },
-  "trades": [],
-  "equity_history": [
+  "trades": [
     {
-      "time": "2026-07-23T05:39:05+00:00",
-      "total_equity": 10000.0,
-      "BTCUSDT": 65707.7,
-      "ETHUSDT": 1924.9
+      "time": "2026-07-23T06:28:09+00:00",
+      "symbol": "ETHUSDT",
+      "side": "BUY",
+      "price": 1924.06,
+      "qty": 0.00649018,
+      "value": 12.5
     },
     {
-      "time": "2026-07-23T05:39:31+00:00",
-      "total_equity": 10000.0,
-      "BTCUSDT": 65712.37,
-      "ETHUSDT": 1924.9
-    },
-    {
-      "time": "2026-07-23T05:39:34+00:00",
-      "total_equity": 10000.0,
-      "BTCUSDT": 65712.36,
-      "ETHUSDT": 1924.9
-    },
-    {
-      "time": "2026-07-23T05:47:42+00:00",
-      "total_equity": 10000.0,
-      "BTCUSDT": 65746.97,
-      "ETHUSDT": 1925.16
-    },
-    {
-      "time": "2026-07-23T05:57:19+00:00",
-      "total_equity": 10000.0,
-      "BTCUSDT": 65698.0,
-      "ETHUSDT": 1923.24
+      "time": "2026-07-23T06:28:09+00:00",
+      "symbol": "BTCUSDT",
+      "side": "BUY",
+      "price": 65695.99,
+      "qty": 0.00019008,
+      "value": 12.5
     }
   ],
-  "updated_at": "2026-07-23T05:57:19+00:00",
+  "equity_history": [
+    {
+      "time": "2026-07-23T06:28:09+00:00",
+      "total_equity": 24.98,
+      "BTCUSDT": 65695.99,
+      "ETHUSDT": 1924.06
+    }
+  ],
+  "updated_at": "2026-07-23T06:28:09+00:00",
   "total": {
-    "equity": 10000.0,
-    "start": 10000.0,
-    "pnl": 0.0,
-    "pnl_pct": 0.0
+    "equity": 24.98,
+    "start": 25.0,
+    "pnl": -0.02,
+    "pnl_pct": -0.08
   }
 }
