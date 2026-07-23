@@ -80,7 +80,7 @@
 </div>
 
 <div class="foot">
-  <b>Precios en tiempo real</b> desde Binance (público, cada 4 s). Estrategia: cruce de medias SMA 7/25 en velas <b>diarias</b>, empieza en USDT y compra en el cruce al alza.<br>
+  <b>Precios en tiempo real</b> desde Binance (público, cada 4 s). Estrategia por activo en velas <b>diarias</b> (BTC: Donchian breakout · ETH: SMA 7/25), validada out-of-sample. Empieza en USDT.<br>
   Esto es <b>paper trading</b> (simulación), no dinero real. El bot decide en GitHub Actions cada 15 min.
 </div>
 
@@ -129,8 +129,7 @@ function renderLive(){
     const invested = s && s.position>0;
     const equity = s ? (s.cash + s.position*price) : null;
     const posTxt = invested ? (fmt(s.position,6)+" @ "+money(s.avg_entry)) : "En espera (USDT)";
-    const fast = s && STATE.config ? STATE.config.fast : "";
-    const slow = s && STATE.config ? STATE.config.slow : "";
+    const stratName = s ? (s.strat || "") : "";
     const trendTxt = s ? (s.trend==='UP'?'↑ alcista':(s.trend==='DOWN'?'↓ bajista':'—')) : '—';
     el.innerHTML = `
       <div class="sym-head">
@@ -140,7 +139,8 @@ function renderLive(){
       <div><span class="price">${money(price)}</span><span class="chg ${chg>=0?'up':'down'}">${chg>=0?'▲':'▼'} ${fmt(Math.abs(chg))}%</span></div>
       <div class="rowmini"><span>Equity</span><b>${equity!=null?money(equity):"—"}</b></div>
       <div class="rowmini"><span>Posición</span><b>${posTxt}</b></div>
-      <div class="rowmini"><span>Tendencia (SMA ${fast}/${slow})</span><b>${trendTxt}</b></div>`;
+      <div class="rowmini"><span>Estrategia</span><b style="font-size:11px">${stratName}</b></div>
+      <div class="rowmini"><span>Tendencia</span><b>${trendTxt}</b></div>`;
   }
   // PnL total en vivo
   if(STATE && STATE.symbols){

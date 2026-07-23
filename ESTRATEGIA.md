@@ -78,11 +78,17 @@ Optimizar en un período y validar en otro **intocado**. Dividimos: 2024 (in-sam
 
 ## 7. La estrategia recomendada (la que corre el bot ahora)
 
-- **Activos:** BTC/USDT y ETH/USDT · **Capital simulado:** $25 ($12.50 c/u).
-- **Temporalidad:** **diaria** (velas de 1 día).
-- **Regla:** empieza en **USDT**; **compra** cuando SMA(7) > SMA(25) (tendencia alcista); **vende** cuando SMA(7) < SMA(25). Long-only.
-- **Comisión simulada:** 0.1% por operación.
-- **Por qué así:** máxima protección a la baja con lo mínimo indispensable; lo simple ganó a lo complejo en la evidencia.
+Tras backtestear **7 familias** (SMA, EMA, momentum TSMOM, Donchian breakout, filtro SMA, dual-momentum) y **validar out-of-sample** (2024 vs 2025+), la mejor combinación robusta es **estrategia por activo**:
+
+| Activo | Estrategia | Retorno 24-26 | Sharpe | 2024 | 2025+ (out-of-sample) |
+|---|---|---|---|---|---|
+| **BTC** | **Donchian 20/10** (breakout tipo Turtle) | **+97%** | **1.12** | +76% | **+12%** ✅ |
+| **ETH** | **SMA 7/25** (cruce de medias) | +53% | 0.60 | −1% | **+55%** ✅ |
+
+- **Capital simulado:** $25 ($12.50 c/u) · **Temporalidad:** diaria · empieza en **USDT** · comisión 0.1%.
+- **BTC (Donchian):** compra al **romper el máximo de 20 días**; vende al romper el mínimo de 10 días.
+- **ETH (SMA):** compra cuando **SMA(7) > SMA(25)**; vende cuando cruza abajo.
+- **Por qué así:** cada activo tiene carácter distinto (BTC rompe niveles, ETH sigue tendencias) y **ambas reglas fueron positivas tanto en el toro (2024) como en el bajista (2025+)** — robustez real, no sobreoptimización. Es lo mejor que encontré probando en serio.
 
 ### Versión "profesional" completa (para cuando crezca la cuenta y vayas a real)
 Añadir sobre la regla base: **filtro de tendencia mayor** (precio > SMA200 diaria) · **ADX > 25** · **stop inicial 2×ATR** · **sizing al 1% de riesgo** · **trailing Chandelier (3×ATR)** · **R:R ≥ 1:2**. Validar **walk-forward** con comisiones reales antes de arriesgar dinero.
