@@ -33,7 +33,7 @@ MAX_TRADES = 200          # cuantas operaciones guardar en el historial
 MAX_EQUITY_POINTS = 2000  # cuantos puntos de la curva de capital guardar
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(HERE, "docs", "data")
+DATA_DIR = os.path.join(HERE, "data")
 STATE_FILE = os.path.join(DATA_DIR, "state.json")
 CSV_FILE = os.path.join(DATA_DIR, "history.csv")
 
