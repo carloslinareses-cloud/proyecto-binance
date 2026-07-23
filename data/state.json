@@ -14,26 +14,26 @@
       "cash": 0.0,
       "position": 0.00019008009469071094,
       "avg_entry": 65695.99,
-      "price": 65104.22,
-      "sma_fast": 65216.97,
-      "sma_slow": 63480.67,
+      "price": 64879.06,
+      "sma_fast": 65184.81,
+      "sma_slow": 63471.66,
       "signal": "LONG",
       "trend": "UP",
       "prev_signal_long": true,
-      "equity": 12.38
+      "equity": 12.33
     },
     "ETHUSDT": {
       "start_cash": 12.5,
       "cash": 0.0,
       "position": 0.0064901822188497245,
       "avg_entry": 1924.06,
-      "price": 1902.54,
-      "sma_fast": 1892.63,
-      "sma_slow": 1798.82,
+      "price": 1889.92,
+      "sma_fast": 1890.83,
+      "sma_slow": 1798.31,
       "signal": "LONG",
       "trend": "UP",
       "prev_signal_long": true,
-      "equity": 12.35
+      "equity": 12.27
     }
   },
   "trades": [
@@ -90,13 +90,19 @@
       "total_equity": 24.73,
       "BTCUSDT": 65104.22,
       "ETHUSDT": 1902.54
+    },
+    {
+      "time": "2026-07-23T16:15:31+00:00",
+      "total_equity": 24.6,
+      "BTCUSDT": 64879.06,
+      "ETHUSDT": 1889.92
     }
   ],
-  "updated_at": "2026-07-23T14:41:42+00:00",
+  "updated_at": "2026-07-23T16:15:31+00:00",
   "total": {
-    "equity": 24.73,
+    "equity": 24.6,
     "start": 25.0,
-    "pnl": -0.27,
-    "pnl_pct": -1.08
+    "pnl": -0.4,
+    "pnl_pct": -1.6
   }
 }
