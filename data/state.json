@@ -16,7 +16,7 @@
       "cash": 12.5,
       "position": 0.0,
       "avg_entry": 0.0,
-      "price": 64785.0,
+      "price": 64791.99,
       "sma_fast": 66556.16,
       "sma_slow": 62823.64,
       "trend": "UP",
@@ -29,7 +29,7 @@
       "cash": 0.0,
       "position": 0.006453305991236419,
       "avg_entry": 1914.34,
-      "price": 1914.22,
+      "price": 1914.19,
       "sma_fast": 1898.34,
       "sma_slow": 1892.2,
       "trend": "UP",
@@ -1463,9 +1463,15 @@
       "total_equity": 24.85,
       "BTCUSDT": 64785.0,
       "ETHUSDT": 1914.22
+    },
+    {
+      "time": "2026-08-09T05:58:24+00:00",
+      "total_equity": 24.85,
+      "BTCUSDT": 64791.99,
+      "ETHUSDT": 1914.19
     }
   ],
-  "updated_at": "2026-08-09T05:09:01+00:00",
+  "updated_at": "2026-08-09T05:58:24+00:00",
   "total": {
     "equity": 24.85,
     "start": 25.0,
