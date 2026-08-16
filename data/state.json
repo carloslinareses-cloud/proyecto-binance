@@ -29,8 +29,8 @@
       "cash": 11.993203689709295,
       "position": 0.0,
       "avg_entry": 0.0,
-      "price": 1880.65,
-      "sma_fast": 1881.03,
+      "price": 1880.8,
+      "sma_fast": 1881.05,
       "sma_slow": 1890.33,
       "trend": "DOWN",
       "signal": "FLAT",
@@ -2609,9 +2609,15 @@
       "total_equity": 24.49,
       "BTCUSDT": 63008.57,
       "ETHUSDT": 1880.65
+    },
+    {
+      "time": "2026-08-16T11:00:32+00:00",
+      "total_equity": 24.49,
+      "BTCUSDT": 63008.57,
+      "ETHUSDT": 1880.8
     }
   ],
-  "updated_at": "2026-08-16T10:41:15+00:00",
+  "updated_at": "2026-08-16T11:00:32+00:00",
   "total": {
     "equity": 24.49,
     "start": 25.0,
