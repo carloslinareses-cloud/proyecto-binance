@@ -16,7 +16,7 @@
       "cash": 12.5,
       "position": 0.0,
       "avg_entry": 0.0,
-      "price": 64425.03,
+      "price": 64411.37,
       "sma_fast": 64962.6,
       "sma_slow": 62900.0,
       "trend": "UP",
@@ -29,9 +29,9 @@
       "cash": 0.0,
       "position": 0.00625948126055702,
       "avg_entry": 1914.09,
-      "price": 1919.47,
-      "sma_fast": 1896.84,
-      "sma_slow": 1895.59,
+      "price": 1918.84,
+      "sma_fast": 1896.75,
+      "sma_slow": 1895.56,
       "trend": "UP",
       "signal": "LONG",
       "strat": "SMA 7/25 (cruce)",
@@ -3253,9 +3253,15 @@
       "total_equity": 24.51,
       "BTCUSDT": 64425.03,
       "ETHUSDT": 1919.47
+    },
+    {
+      "time": "2026-08-19T10:38:10+00:00",
+      "total_equity": 24.51,
+      "BTCUSDT": 64411.37,
+      "ETHUSDT": 1918.84
     }
   ],
-  "updated_at": "2026-08-19T09:58:52+00:00",
+  "updated_at": "2026-08-19T10:38:10+00:00",
   "total": {
     "equity": 24.51,
     "start": 25.0,
